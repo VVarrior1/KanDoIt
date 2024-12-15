@@ -1,7 +1,0 @@
-First Name, Last Name -- UCID
-----------------------------------
-Abdelrahman, Mohamed -- 30162037
-Alex, Burn -- 30002916
-Dhyey, Lalseta -- 30089127
-Frank, Yan -- 30126391
-Mohamed, Elnaggar -- 30122599
