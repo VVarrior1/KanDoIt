@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  phoneNum  String @unique
+  password  String
+  firstName String
+  lastName  String
+  roleType  String   @default("EMPLOYEE") // can only be ["EMPLOYEE", "MANAGER", "ADMIN"]
+
+  Projects Project[]  @relation("ManagerProjects")
+  Tasks    Task[]    @relation("UserTasks")
+  Comments Comment[]
+}
+
+model Project {
+  id  Int     @id @default(autoincrement())
+  projectName String
+  manager     User?   @relation("ManagerProjects", fields: [manager_id], references: [id])
+  manager_id  Int?
+  hasFile     Boolean @default(false)
+
+  Tasks    Task[]
+  Files    File[]
+}
+
+model Task {
+  id      Int       @id @default(autoincrement()) 
+  taskName     String
+  dueDate      DateTime?
+  taskProgress Boolean   @default(false)
+  taskPriority String?   // can only be one of ["LOW", "MEDIUM", "HIGH"]  
+  taskType     String?
+  project      Project   @relation(fields: [project_id], references: [id])
+  project_id   Int
+  employee     User?     @relation("UserTasks", fields: [employee_id], references: [id])
+  employee_id  Int?
+
+  Comments Comment[]
+}
+
+model Comment {
+  id Int      @id @default(autoincrement())
+  task       Task    @relation(fields: [task_id], references: [id])
+  task_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  created_at DateTime @default(now())
+  message    String?
+}
+
+model File {
+  file_id    Int     @id @default(autoincrement())
+  file       String
+  project    Project @relation(fields: [project_id], references: [id])
+  project_id Int
+}
