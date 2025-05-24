@@ -21,6 +21,7 @@ git clone git@github.com:VVarrior1/KanDoIt.git
 
 ### Step 3: 
 Ensure docker desktop is running
+then run
 ```bash
  docker-compose up 
  ```
